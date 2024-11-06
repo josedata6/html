@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Starry Sky Animation</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background-color: #000033; /* Dark night sky background */
+    }
+    canvas {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="starrySky"></canvas>
+
+  <script>
+    const canvas = document.getElementById('starrySky');
+    const ctx = canvas.getContext('2d');
+
+    // Set canvas to full screen
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    // Star properties
+    const stars = [];
+    const numStars = 100;
+    for (let i = 0; i < numStars; i++) {
+      stars.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        brightness: Math.random(),
+        twinkleSpeed: Math.random() * 0.02 + 0.01,
+      });
+    }
+
+    // Function to draw stars
+    function drawStars() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let star of stars) {
+        // Adjust brightness for a twinkling effect
+        star.brightness += star.twinkleSpeed;
+        if (star.brightness > 1 || star.brightness < 0) star.twinkleSpeed *= -1;
+
+        // Set star color based on brightness
+        const color = `rgba(255, 255, 255, ${star.brightness})`;
+        ctx.fillStyle = color;
+        
+        // Draw star as a small circle
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, 2, 0, 2 * Math.PI);
+        ctx.fill();
+      }
+    }
+
+    // Animation loop
+    function animate() {
+      drawStars();
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+  </script>
+</body>
+</html>
